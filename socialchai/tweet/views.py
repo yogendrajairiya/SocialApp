@@ -2,7 +2,7 @@ from django.shortcuts import redirect, render
 from django.http import HttpResponse
 from .models import Tweet
 from .forms import TweetForm
-from django.shortcuts import get_list_or_404
+from django.shortcuts import get_object_or_404
 
 # Create your views here.
 def index(request):
@@ -26,7 +26,9 @@ def tweet_create(request):
   return render(request, 'tweet_form.html', {'form': form})  # Render the form for creating a new tweet
 
 def tweet_edit(request, tweet_id):
-    tweet = get_list_or_404(Tweet, id=tweet_id)
+    tweet = get_object_or_404(Tweet, id=tweet_id)
+    if tweet.user != request.user:
+        return HttpResponse("You are not allowed to edit this tweet.", status=403)  # Check if the user is the owner of the tweet
     if request.method == 'POST':
       form = TweetForm(request.POST, request.FILES, instance=tweet)  # Handle file uploads
       if form.is_valid():
@@ -37,7 +39,7 @@ def tweet_edit(request, tweet_id):
     return render(request, 'tweet_form.html', {'form': form})  
     
 def tweet_delete(request, tweet_id):
-    tweet = get_list_or_404(Tweet, id=tweet_id, user = request.user)  
+    tweet = get_object_or_404(Tweet, id=tweet_id, user = request.user)  
     if request.method == 'POST':
         tweet.delete()
         return redirect('tweet_list') 
