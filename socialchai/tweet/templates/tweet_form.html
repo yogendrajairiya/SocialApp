@@ -1,0 +1,23 @@
+{% extends 'layout.html' %}
+{% load static %}
+
+{% block title %}
+  Home - Social Chai
+{% endblock %}
+
+{% block content %}
+  <h1>Welcome to Social Chai & Tweet</h1>
+  <div class="align-center: center;">
+    <p>This is a social media application where you can share your thoughts.</p>
+    <a class="btn btn-primary mb-4" href="{% url 'tweet_create' %}">Create a Tweet</a>
+    <h3>{% if form.instance.pk %}Edit Tweet{% else %}Create Tweet{% endif %}</h3>
+    <form method="post" enctype="multipart/form-data" class="form">
+      {% csrf_token %}
+      {{ form.as_p }}
+      <button type="submit" class="btn btn-warning">Submit</button>
+    </form>
+    <div class="mt-3">
+      <a href="{% url 'tweet_list' %}">Back to tweet list</a>
+    </div>
+  </div>
+{% endblock %}
