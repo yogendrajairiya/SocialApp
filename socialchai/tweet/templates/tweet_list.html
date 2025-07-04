@@ -1,9 +1,31 @@
 {% extends 'layout.html' %}
+{% load static %}
 
 {% block title %}
-  Tweet List
+  Home - Social Chai
 {% endblock %}
 
 {% block content %}
-  
+  <h1>Welcome to Social Chai & Tweet</h1>
+  <p>This is a social media application where you can share your thoughts.</p>
+  <a class="btn btn-primary mb-4" href="{% url 'tweet_create' %}">Create a Tweet</a>
+
+    <div class="container row gap-2">
+      {% for tweet in tweets %}
+        <div class="card mt-1" style="width: 17rem;">
+          {% if tweet.photo %}
+            <img src="{{ tweet.photo.url }}" class="card-img-top mt-2" alt="Tweet Photo">
+          {% else %}
+            <img src="{% static 'default.jpg' %}" class="card-img-top" alt="Default Photo">
+          {% endif %}          <div class="card-body">
+            <h5 class="card-title">{{ tweet.user.username }}</h5>
+            <p class="card-text">{{ tweet.text }}</p>
+            <a href="{% url 'tweet_edit' tweet.id %}" class="btn btn-primary">Edit</a>
+            <a href="{% url 'tweet_delete' tweet.id %}" class="btn btn-danger">Delete</a>
+          </div>
+        </div>
+      {% endfor %}
+    </div>
 {% endblock %}
+
+
