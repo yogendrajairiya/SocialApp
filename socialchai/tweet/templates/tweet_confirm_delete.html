@@ -1,0 +1,16 @@
+{% extends 'layout.html' %}
+
+{% block title %}
+  Home - Social Chai
+{% endblock %}
+
+{% block content %}
+  <h1 class="text-center mt-4" >Are you sure that you want to delete the tweet ?</h1>
+  <form method="post" class="text-center">
+    {% csrf_token %}
+    <button type="submit" class="btn btn-danger mt-4">Confirm Delete</button>
+    <a href="{% url 'tweet_list' %}" class="btn btn-success mt-4">
+      Cancel
+    </a>
+  </form>
+{% endblock %}
