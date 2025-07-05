@@ -23,6 +23,6 @@ from django.conf.urls.static import static
 urlpatterns = [
     path('admin/', admin.site.urls),
     path('tweet/', include('tweet.urls')),  # Include the tweet app's URLs
-    
-] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
+    path('accounts/', include('django.contrib.auth.urls')),  # For login, logout, password management
+] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT) # Serve media files
 
