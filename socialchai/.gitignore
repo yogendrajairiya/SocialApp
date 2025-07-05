@@ -1,0 +1,45 @@
+# Python
+__pycache__/
+*.py[cod]
+*.pyo
+*.pyd
+*.pyc
+
+# Environment
+.env
+.venv/
+venv/
+env/
+*.env
+
+# Django migrations
+*/migrations/*.pyc
+*/migrations/*.pyo
+*/migrations/*.pyd
+*/migrations/__pycache__/
+
+# SQLite DB
+*.sqlite3
+
+# Logs
+*.log
+
+# IDE/editor folders
+.vscode/
+.idea/
+
+# OS-specific
+.DS_Store
+Thumbs.db
+
+# Static/media files (optional)
+staticfiles/
+media/
+
+# Pycharm
+*.iml
+
+socialchai/socialchai/__pycache__/
+socialchai/tweet/__pycache__/
+socialchai/tweet/migrations/__pycache__/
+tweet/__pycache__/

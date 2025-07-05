@@ -3,6 +3,7 @@ from django.http import HttpResponse
 from .models import Tweet
 from .forms import TweetForm
 from django.shortcuts import get_object_or_404
+from django.contrib.auth.decorators import login_required
 
 # Create your views here.
 def index(request):
@@ -11,7 +12,8 @@ def index(request):
 def tweet_list(request):
     tweets = Tweet.objects.all().order_by('-created_at')  # Fetch all tweets ordered by creation date
     return render(request, 'tweet_list.html', {'tweets': tweets})
-  
+
+@login_required  # Ensure that only logged-in users can create tweets
 def tweet_create(request):
   if request.method == 'POST':
       form = TweetForm(request.POST, request.FILES)  # Handle file uploads
@@ -25,6 +27,7 @@ def tweet_create(request):
   
   return render(request, 'tweet_form.html', {'form': form})  # Render the form for creating a new tweet
 
+@login_required  
 def tweet_edit(request, tweet_id):
     tweet = get_object_or_404(Tweet, id=tweet_id)
     if tweet.user != request.user:
@@ -37,7 +40,8 @@ def tweet_edit(request, tweet_id):
     else:
       form = TweetForm(instance=tweet)
     return render(request, 'tweet_form.html', {'form': form})  
-    
+
+@login_required   
 def tweet_delete(request, tweet_id):
     tweet = get_object_or_404(Tweet, id=tweet_id, user = request.user)  
     if request.method == 'POST':
