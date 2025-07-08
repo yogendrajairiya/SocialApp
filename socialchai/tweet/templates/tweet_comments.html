@@ -1,0 +1,45 @@
+{% extends "layout.html" %}
+
+
+{% block title %}
+  {{ tweet.user.username }}'s Tweet - Social Chai
+{% endblock title %}
+  
+{% block content %}
+  <div class="container mt-4">
+    <div class="row">
+      <div class="col-md-8 offset-md-2">
+        <h2>{{ tweet.user.username }}'s Tweet</h2>
+        <p>{{ tweet.text }}</p>
+        {% if tweet.photo %}
+          <img src="{{ tweet.photo.url }}" class="img-thumbnail mt-2" style="max-width: 200px;" alt="Tweet Photo">
+        {% endif %}       
+
+        <hr>
+        <h3>Leave a Comment</h3>
+        <form method="post" enctype="multipart/form-data">
+          {% csrf_token %}
+          <textarea name="text" class="form-control" placeholder="Write your comment..." required></textarea><br>
+          <input type="file" name="attached_photo"><br><br>
+          <button type="submit" class="btn btn-primary">Post Comment</button>
+        </form>
+
+        <hr>
+        <h4>Comments:</h4>
+        {% for comment in comments %}
+          <div>
+            <strong>{{ comment.user.username }}</strong>: {{ comment.text }}<br>
+            {% if comment.attached_photo %}
+              <img src="{{ comment.attached_photo.url }}" width="100"><br>
+            {% endif %}
+            <small>{{ comment.created_at }}</small>
+            <hr>
+          </div>
+        {% empty %}
+          <p>No comments yet.</p>
+        {% endfor %}
+
+      </div>
+    </div>
+  </div>
+{% endblock content %}  

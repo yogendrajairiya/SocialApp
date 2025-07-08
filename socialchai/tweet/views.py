@@ -1,6 +1,6 @@
 from django.shortcuts import redirect, render
 from django.http import HttpResponse
-from .models import Tweet
+from .models import Tweet, Comment
 from .forms import TweetForm, UserRegistrationForm
 from django.shortcuts import get_object_or_404
 from django.contrib.auth.decorators import login_required
@@ -62,3 +62,15 @@ def register(request):
     else:
         form = UserRegistrationForm()
     return render(request, 'registration/register.html', {'form': form})  # Render the registration form
+
+def tweet_comments(request, tweet_id):
+    tweet = get_object_or_404(Tweet, id=tweet_id)
+    comments = tweet.comments.all().order_by('-created_at')  # Fetch comments related to the tweet
+    if request.method == 'POST':
+        text = request.POST.get('text')
+        attached_photo = request.FILES.get('attached_photo')
+        if text:  # Ensure that the comment text is not empty
+            comment = Comment(tweet=tweet, user=request.user, text=text, attached_photo=attached_photo)
+            comment.save()
+            return redirect('tweet_comments', tweet_id=tweet.id)  # Redirect to the same tweet's comments page
+    return render(request, 'tweet_comments.html', {'tweet': tweet, 'comments': comments})  # Render the comments page

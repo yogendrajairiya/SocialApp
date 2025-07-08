@@ -26,6 +26,9 @@
               <a href="{% url 'tweet_edit' tweet.id %}" class="btn btn-primary">Edit</a>
               <a href="{% url 'tweet_delete' tweet.id %}" class="btn btn-danger">Delete</a>
             {% endif %}
+
+             <a href="{% url 'tweet_comments' tweet.id %}" class="btn btn-secondary mt-2">💬 View Comments</a>
+
           </div>
         </div>
       {% endfor %}
