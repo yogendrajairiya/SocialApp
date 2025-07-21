@@ -5,6 +5,10 @@ __pycache__/
 *.pyd
 *.pyc
 
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
 # Environment
 .env
 .venv/

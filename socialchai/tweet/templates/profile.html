@@ -1,0 +1,52 @@
+{% extends 'layout.html' %}
+
+{% block title %}
+  Profile - {{ user.username }}
+{% endblock %}
+
+{% block content %}
+  <h2>{{ user.username }}'s Profile Section</h2>
+  <p><strong>Email:</strong> {{ user.email }}</p>
+  <p><strong>Joined on:</strong> {{ user.date_joined }}</p>
+  <p><strong>Bio:</strong> {{ profile.bio }}</p>
+  <p><strong>Location:</strong> {{ profile.location }}</p>
+  <p><strong>Birthdate:</strong> {{ profile.birthdate }}</p>
+  <hr>
+
+  <h3>Profile Details</h3>
+  
+  {% if profile.profile_photo %}
+    <img src="{{ profile.profile_photo.url }}" alt="Profile Photo" width="150">
+  {% else %}
+    <p>No profile photo uploaded.</p>
+  {% endif %}
+  <h4>Profile Photo</h4>
+  <form method="post" enctype="multipart/form-data">
+    {% csrf_token %}
+    <div class="mb-3">
+      <label for="profile_photo" class="form-label">Upload Profile Photo</label>
+      <input type="file" class="form-control" id="profile_photo" name="profile_photo">
+    </div>
+    <button type="submit" class="btn btn-primary">Update Photo</button>
+  </form>   
+  <h4>Profile Information</h4>
+  <form method="post">
+    {% csrf_token %}
+    <div class="mb-3"> 
+      <label for="bio" class="form-label">Bio</label>
+      <textarea class="form-control" id="bio" name="bio" rows="3">{{ profile.bio }}</textarea>
+    </div>
+    <div class="mb-3">
+      <label for="location" class="form-label">Location</label>
+      <input type="text" class="form-control" id="location" name="location" value="{{ profile.location }}">
+    </div>
+    <div class="mb-3">
+      <label for="birthdate" class="form-label">Birthdate</label>
+      <input type="date" class="form-control" id="birthdate" name="birthdate" value="{{ profile.birthdate }}">
+    </div>
+    <button type="submit" class="btn btn-primary">Update Profile</button>
+  </form>
+{% endblock %}
+
+
+

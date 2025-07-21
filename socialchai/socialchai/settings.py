@@ -56,7 +56,7 @@ ROOT_URLCONF = 'socialchai.urls'
 TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
-        'DIRS': [os.path.join(BASE_DIR, 'templates')],  # Directory for custom templates
+        'DIRS': [BASE_DIR / 'templates'],
         'APP_DIRS': True,
         'OPTIONS': {
             'context_processors': [
@@ -135,6 +135,7 @@ STATICFILES_DIRS = [os.path.join(BASE_DIR, 'static')]
 # https://docs.djangoproject.com/en/5.2/ref/settings/#default-auto-field
 
 LOGIN_URL= '/accounts/login/'  # URL for login page
+LOGIN_REDIRECT_URL = 'tweet_list'
 
-LOGIN_REDIRECT_URL = 'tweet_list' 
-LOGOUT_REDIRECT_URL = 'tweet_list'
+# LOGOUT_REDIRECT_URL = 'tweet_list'  # URL to redirect after logout
+
