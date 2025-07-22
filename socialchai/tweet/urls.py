@@ -13,6 +13,6 @@ urlpatterns = [
     path('<int:tweet_id>/delete/', views.tweet_delete, name='tweet_delete'), 
     path('register/', views.register, name='register'), 
     path('tweet/<int:tweet_id>/comments/', views.tweet_comments, name='tweet_comments'),
-    path('profile/', views.my_profile_view, name='my_profile'),
-    
+    path('profile/', views.profile_view, name='profile_view'),
+    path('profile/edit/', views.edit_profile, name='edit_profile'),
 ]

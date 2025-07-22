@@ -27,5 +27,5 @@ urlpatterns = [
     path('accounts/', include('django.contrib.auth.urls')),  # For login, logout, password management
     path('', lambda request: redirect('tweet_list', permanent=False)),
 
-] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT) # Serve media files
-
+] 
+urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

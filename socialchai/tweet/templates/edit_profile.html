@@ -1,0 +1,58 @@
+{% extends 'layout.html' %}
+
+{% block title %}
+  {{ user.username }} - Edit Profile
+{% endblock %}
+
+{% block content %}
+  <div class="card shadow rounded-1 p-5" style="background: linear-gradient(rgb(233, 226, 246), rgb(114, 64, 243));">
+    <h2 class="mb-4 text-center text-white">Edit Profile</h2>
+    
+    <form method="POST" enctype="multipart/form-data">
+      {% csrf_token %}
+      <style>
+        input{
+          height: 50px;
+          width: 100%;
+          font-size: 1.1rem;
+        }
+      </style>
+      
+      <div class="">
+        <div class="col-md-19">
+          <div class="card p-4 mb-4" style="background: linear-gradient(rgb(233, 226, 246), rgba(165, 132, 246, 1));">
+            <h5>User Info</h5>
+            {{ user_form.as_p }}
+          </div>
+        </div>
+
+        <div class="col-md-19">
+          <div class="card p-4 mb-4" style="background: linear-gradient(rgba(185, 148, 254, 1), rgb(114, 64, 243));">
+            <h5>Profile Info</h5>
+            {{ profile_form.as_p }}
+          </div>
+        </div>
+      </div>
+
+      <div class="text-center">
+        <button type="submit" class="btn btn-success btn-lg w-100">Save Changes</button>
+      </div>
+    </form>
+  </div>
+{% endblock %}
+
+
+<script>
+  document.addEventListener("DOMContentLoaded", function () {
+    const imageInput = document.querySelector('input[type="file"][name="image"]');
+    const preview = document.getElementById('imagePreview');
+
+    imageInput.addEventListener("change", function () {
+      const file = this.files[0];
+      if (file) {
+        preview.src = URL.createObjectURL(file);
+      }
+    });
+  });
+</script>
+
