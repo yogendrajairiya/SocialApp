@@ -1,7 +1,7 @@
 from django.shortcuts import redirect, render
 from django.http import HttpResponse
-from .models import Tweet, Comment
-from .forms import TweetForm, UserRegistrationForm
+from .models import Tweet, Comment, Profile
+from .forms import TweetForm, UserRegistrationForm, UserForm,  ProfileForm
 from django.shortcuts import get_object_or_404
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth import login
@@ -74,3 +74,32 @@ def tweet_comments(request, tweet_id):
             comment.save()
             return redirect('tweet_comments', tweet_id=tweet.id)  # Redirect to the same tweet's comments page
     return render(request, 'tweet_comments.html', {'tweet': tweet, 'comments': comments})  # Render the comments page
+
+@login_required
+def profile_view(request):
+    profile = request.user.profile  # ✅ simple, clean
+    return render(request, 'profile.html', {'profile': profile})
+
+
+@login_required
+def edit_profile(request):
+    user = request.user
+    profile = user.profile
+
+    if request.method == 'POST':
+        user_form = UserForm(request.POST, instance=user)
+        profile_form = ProfileForm(request.POST, request.FILES, instance=profile)
+
+        if user_form.is_valid() and profile_form.is_valid():
+            user_form.save()
+            profile_form.save()
+            return redirect('profile_view')
+    else:
+        user_form = UserForm(instance=user)
+        profile_form = ProfileForm(instance=profile)
+
+
+    return render(request, 'edit_profile.html', {
+        'user_form': user_form,
+        'profile_form': profile_form
+    })
