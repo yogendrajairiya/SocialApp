@@ -16,13 +16,15 @@
         {% endif %}       
 
         <hr>
-        <h3>Leave a Comment</h3>
-        <form method="post" enctype="multipart/form-data">
-          {% csrf_token %}
-          <textarea name="text" class="form-control" placeholder="Write your comment..." required></textarea><br>
-          <input type="file" name="attached_photo"><br><br>
-          <button type="submit" class="btn btn-primary">Post Comment</button>
-        </form>
+          {% if user.is_authenticated %}
+            <h3>Comment here</h3>
+            <form method="post" enctype="multipart/form-data">
+              {% csrf_token %}
+              <textarea name="text" class="form-control" placeholder="Write your comment..." required></textarea><br>
+              <input type="file" name="attached_photo"><br><br>
+              <button type="submit" class="btn btn-primary">Post Comment</button>
+            </form>
+          {% endif %}
 
         <hr>
         <h4>Comments:</h4>

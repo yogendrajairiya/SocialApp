@@ -1,0 +1,114 @@
+{% extends 'layout.html' %}
+{% load static %}
+
+{% block title %}
+  Home - Social Chai
+{% endblock %}
+
+{% block content %}
+  {% comment %} <div id="welcome-message">
+    <h3>Welcome to Social Chai & Tweet</h3>
+    <p>This is a social media application where you can share your thoughts.</p>
+  </div> {% endcomment %}
+
+  <a class="navbar-brand w-100 text-center" href="{% url 'tweet_list' %}">
+    <img src="{% static 'images/social_final.png' %}" alt="Logo" width=15% height=15% class="mx-auto d-block">
+  </a>
+  <hr>
+
+  <div id="tweet-container" class="container d-flex flex-column gap-3">
+    <div class="row">
+      {% for tweet in tweets %}
+        {% include 'tweets/_tweet_card.html' with tweet=tweet %}
+      {% endfor %}
+    </div>
+  </div>
+
+  <div id="loader" style="text-align: center; padding: 10px;">Loading more...</div>
+
+  <script>
+
+    window.addEventListener('load', () => {
+      setTimeout(() => {
+        const welcome = document.getElementById('welcome-message');
+        if (welcome) {
+          welcome.style.display = 'none';
+        }
+      }, 5000); // 5000ms = 5 seconds
+    });window.addEventListener('load', () => {
+      setTimeout(() => {
+        const welcome = document.getElementById('welcome-message');
+        if (welcome) {
+          welcome.style.display = 'none';
+        }
+      }, 5000); // 5000ms = 5 seconds
+    });
+
+
+  let page = 2;
+  let loading = false;
+  let hasNext = true;
+
+  function loadMoreTweets() {
+    if (loading || !hasNext) return;
+
+    loading = true;
+    fetch(`?page=${page}`, {
+      headers: { 'X-Requested-With': 'XMLHttpRequest' }
+    })
+    .then(response => response.json())
+    .then(data => {
+      const container = document.querySelector("#tweet-container .row");
+      container.insertAdjacentHTML("beforeend", data.html);
+      hasNext = data.has_next;
+      page++;
+      loading = false;
+
+      if (!hasNext) {
+        document.getElementById("loader").innerText = "No more tweets.";
+      }
+    })
+    .catch(err => {
+      console.error("Error loading tweets:", err);
+      loading = false;
+    });
+  }
+
+  window.addEventListener('scroll', () => {
+    if ((window.innerHeight + window.scrollY) >= document.body.offsetHeight - 100) {
+      loadMoreTweets();
+    }
+  });
+
+  // Optional: load next page if content is too short on first load
+  window.addEventListener('load', () => {
+    if (document.body.offsetHeight < window.innerHeight) {
+      loadMoreTweets();
+    }
+  });
+</script>
+
+{% if show_welcome %}
+  <div id="welcome-toast" class="toast show" style="
+    position: fixed;
+    top: 20px;
+    right: 20px;
+    background-color: rgba(114, 64, 243, 0.9);
+    color: white;
+    padding: 1rem 1.5rem;
+    border-radius: 8px;
+    z-index: 1050;
+    font-weight: 600;
+    transition: opacity 0.5s ease;">
+    🎉 Welcome, {{ user.username }}!
+  </div>
+
+  <script>
+    setTimeout(function() {
+      const toast = document.getElementById('welcome-toast');
+      if (toast) toast.style.display = 'none';
+    }, 5000); // hide after 5 sec
+  </script>
+{% endif %}
+{% endblock %}
+
