@@ -1,14 +1,19 @@
+{% load static %}
+
 <div class="col-12 mb-3">
   <div class="card w-100 h-100 shadow" style="background-color: rgba(0, 0, 0, 0.3); border: none;">
-    
-
-    <img src="{{ tweet.photo.url|default:'/static/default.jpg' }}" class="card-img-top" alt="Tweet Photo">
     <div class="card-header text-white fw-bold" style="background-color: transparent;">
       👤 @{{ tweet.user.username }} <small>{{ tweet.created_at|timesince }} ago</small>
-      {% if tweet.updated_at %}
-        <small> (Edited at: {{ tweet.updated_at|timesince }} ago)</small>
-      {% endif %}
+      
     </div>
+    {% if tweet.photo %}
+      <img src="{{ tweet.photo.url }}" class="card-img" alt="Tweet Photo">
+    {% else %}
+      <img src="{% static 'images/default_image.png' %}" class="card-img" alt="Default Photo">
+    {% endif %}
+    {% if tweet.updated_at != tweet.created_at %}
+      <small class="text-muted">(Edited at: {{ tweet.updated_at|timesince }} ago)</small>
+    {% endif %}
     <div class="card-footer text-white">
       
     </div>

@@ -5,7 +5,7 @@
 {% endblock %}
 
 {% block content %}
-  <div class="card shadow rounded-1 p-5" style="background: linear-gradient(rgb(233, 226, 246), #289ea4);">
+  <div class="card shadow rounded-1 p-5" style="background: linear-gradient(rgba(148, 217, 242, 1), #31d3dbff);">
     <h2 class="mb-4 text-center text-white">Edit Profile</h2>
     
     <form method="POST" enctype="multipart/form-data">
@@ -20,14 +20,14 @@
       
       <div class="">
         <div class="col-md-19">
-          <div class="card p-4 mb-4" style="background: linear-gradient(rgb(233, 226, 246), #289ea4);">
+          <div class="card p-4 mb-4" style="background: linear-gradient(rgba(226, 244, 246, 1), #4cebf3ff);">
             <h5>User Info</h5>
             {{ user_form.as_p }}
           </div>
         </div>
 
         <div class="col-md-19">
-          <div class="card p-4 mb-4" style="background: linear-gradient(rgba(185, 148, 254, 1), #289ea4);">
+          <div class="card p-4 mb-4" style="background: linear-gradient(#4cebf3ff, #3cdae2ff, #289ea4);">
             <h5>Profile Info</h5>
             {{ profile_form.as_p }}
           </div>

@@ -82,11 +82,6 @@
           <button class="btn btn-outline-success" type="submit">Search</button>
         </form>
 
-
-        <a href="{% url 'tweet_list' %}" class="btn btn-outline-light me-2">
-          <i class="bi bi-person-circle"></i> Home
-        </a>
-
         {% if user.is_authenticated %}
           <form method='post' action="{% url 'logout' %}" class="d-inline">
             {% csrf_token %}
@@ -118,6 +113,7 @@
       <a href="{% url 'tweet_list' %}" class="list-group-item list-group-item-action">Archived</a>
       <a href="{% url 'tweet_list' %}" class="list-group-item list-group-item-action">Notifications</a>
       <a href="{% url 'tweet_list' %}" class="list-group-item list-group-item-action">Messages</a>
+      <a href="{% url 'profile_view' %}" class="list-group-item list-group-item-action">My Profile</a>
       <a href="{% url 'tweet_list' %}" class="list-group-item list-group-item-action">Settings</a>
     </div>
   </div>
