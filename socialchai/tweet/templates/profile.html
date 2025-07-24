@@ -5,11 +5,11 @@
 {% endblock %}
 
 {% block content %}
-    <div class="card shadow rounded-1 p-5" style="background: linear-gradient(rgb(233, 226, 246), rgb(114, 64, 243));">
+    <div class="card shadow rounded-1 p-5" style="background: linear-gradient(rgba(96, 196, 232, 1), #289ea4);">
       <div class="row align-items-center">
-        <div class="col-md-3 text-center">
-          {% if profile.profile_photo %}
-            <img src="{{ profile.profile_photo.url }}" class="img-fluid rounded-circle border" style="width:450px; height:300px; alt="Profile Photo">
+        <div class="col-md-5 text-center">
+          {% if profile.profile_photo %} 
+          <img src="{{ profile.profile_photo.url }}" class="img-fluid rounded-circle border" style="width: 300px; height: 300px; object-fit: cover;" alt="Profile Photo">
           {% else %}
             <div class="bg-secondary text-white rounded-circle d-flex align-items-center justify-content-center" style="width:150px; height:150px;">
               No Photo
@@ -17,9 +17,9 @@
           {% endif %}
         </div>
 
-        <div class="col-md-9">
+        <div class="col-md-6">
           <div class="d-flex gap-4 mt-3">
-            <div><strong>Posts:</strong> {{ profile.post_count|default:"0" }}</div>
+            <div><strong>Posts:</strong> {{ tweet_count | default:"0" }}</div>
             <div><strong>Followers:</strong> {{ profile.followers_count|default:"0" }}</div>
             <div><strong>Following:</strong> {{ profile.following_count|default:"0" }}</div>
           </div>
@@ -41,7 +41,7 @@
         </div>
       </div>
       <div class="mt-4 text-center">
-        <a href="{% url 'edit_profile' %}" class="btn btn-lg w-100 mt-3 text-white" style="background-color: #c2a4fbff;">
+        <a href="{% url 'edit_profile' %}" class="btn btn-lg w-100 mt-3 text-dark" style="background-color: #70f3ffff;">
           Edit Full Profile
         </a>
       </div>

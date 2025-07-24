@@ -1,0 +1,31 @@
+{% load static %}
+
+<div class="col-12 mb-3">
+  <div class="card w-100 h-100 shadow" style="background-color: rgba(0, 0, 0, 0.3); border: none;">
+    <div class="card-header text-white fw-bold" style="background-color: transparent;">
+      👤 @{{ tweet.user.username }} <small>{{ tweet.created_at|timesince }} ago</small>
+      
+    </div>
+    {% if tweet.photo %}
+      <img src="{{ tweet.photo.url }}" class="card-img" alt="Tweet Photo">
+    {% else %}
+      <img src="{% static 'images/default_image.png' %}" class="card-img" alt="Default Photo">
+    {% endif %}
+    {% if tweet.updated_at != tweet.created_at %}
+      <small class="text-muted">(Edited at: {{ tweet.updated_at|timesince }} ago)</small>
+    {% endif %}
+    <div class="card-footer text-white">
+      
+    </div>
+    <div class="card-body text-white">
+      <p class="card-text">{{ tweet.text }}</p>
+
+      {% if tweet.user == user %}
+        <a href="{% url 'tweet_edit' tweet.id %}" class="btn btn-outline-primary btn-sm me-2">Edit</a>
+        <a href="{% url 'tweet_delete' tweet.id %}" class="btn btn-outline-danger btn-sm">Delete</a>
+      {% endif %}
+
+      <a href="{% url 'tweet_comments' tweet.id %}" class="btn btn-outline-light btn-sm mt-2">💬 View Comments</a>
+    </div>
+  </div>
+</div>

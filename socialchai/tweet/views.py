@@ -5,14 +5,34 @@ from .forms import TweetForm, UserRegistrationForm, UserForm,  ProfileForm
 from django.shortcuts import get_object_or_404
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth import login
+from django.core.paginator import Paginator
+from django.http import JsonResponse
+from django.template.loader import render_to_string
 
 # Create your views here.
 def index(request):
     return render(request, 'index.html')  # Ensure you have a template at 'tweet/index.html'
-  
+
 def tweet_list(request):
-    tweets = Tweet.objects.all().order_by('-created_at')  # Fetch all tweets ordered by creation date
-    return render(request, 'tweet_list.html', {'tweets': tweets})
+    tweets = Tweet.objects.all().order_by('-created_at')
+    paginator = Paginator(tweets, 3)  # 3 tweets per page
+    page_number = request.GET.get("page", 1)
+    page_obj = paginator.get_page(page_number)
+
+    show_welcome = False
+    if request.user.is_authenticated:
+        if not request.session.get('welcome_shown'):
+            show_welcome = True
+            request.session['welcome_shown'] = True
+            
+    if request.headers.get('x-requested-with') == 'XMLHttpRequest':
+        html = render_to_string('tweets/_tweet_cards.html', {'tweets': page_obj}) # Render the template
+        return JsonResponse({
+            'html': html,
+            'has_next': page_obj.has_next()
+        })
+
+    return render(request, 'tweets/tweet_list.html', {'tweets': page_obj})
 
 @login_required  # Ensure that only logged-in users can create tweets
 def tweet_create(request):
@@ -77,8 +97,12 @@ def tweet_comments(request, tweet_id):
 
 @login_required
 def profile_view(request):
-    profile = request.user.profile  # ✅ simple, clean
-    return render(request, 'profile.html', {'profile': profile})
+    profile = request.user.profile
+    tweet_count = Tweet.objects.filter(user=request.user).count()
+    return render(request, 'profile.html', {
+        'profile': profile,
+        'tweet_count': tweet_count
+    })
 
 
 @login_required
