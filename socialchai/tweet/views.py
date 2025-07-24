@@ -1,6 +1,6 @@
 from django.shortcuts import redirect, render
 from django.http import HttpResponse
-from .models import Tweet, Comment, Profile
+from .models import Tweet, Comment, Profile, Like
 from .forms import TweetForm, UserRegistrationForm, UserForm,  ProfileForm
 from django.shortcuts import get_object_or_404
 from django.contrib.auth.decorators import login_required
@@ -8,6 +8,7 @@ from django.contrib.auth import login
 from django.core.paginator import Paginator
 from django.http import JsonResponse
 from django.template.loader import render_to_string
+from django.contrib.contenttypes.models import ContentType
 
 # Create your views here.
 def index(request):
@@ -15,24 +16,19 @@ def index(request):
 
 def tweet_list(request):
     tweets = Tweet.objects.all().order_by('-created_at')
-    paginator = Paginator(tweets, 3)  # 3 tweets per page
-    page_number = request.GET.get("page", 1)
-    page_obj = paginator.get_page(page_number)
 
-    show_welcome = False
+    liked_tweet_ids = []
     if request.user.is_authenticated:
-        if not request.session.get('welcome_shown'):
-            show_welcome = True
-            request.session['welcome_shown'] = True
-            
-    if request.headers.get('x-requested-with') == 'XMLHttpRequest':
-        html = render_to_string('tweets/_tweet_cards.html', {'tweets': page_obj}) # Render the template
-        return JsonResponse({
-            'html': html,
-            'has_next': page_obj.has_next()
-        })
+        tweet_type = ContentType.objects.get_for_model(Tweet)
+        liked_tweet_ids = Like.objects.filter(
+            user=request.user,
+            content_type=tweet_type
+        ).values_list('object_id', flat=True)
 
-    return render(request, 'tweets/tweet_list.html', {'tweets': page_obj})
+    return render(request, 'tweets/tweet_list.html', {
+        'tweets': tweets,
+        'liked_tweet_ids': liked_tweet_ids
+    })
 
 @login_required  # Ensure that only logged-in users can create tweets
 def tweet_create(request):
@@ -127,3 +123,17 @@ def edit_profile(request):
         'user_form': user_form,
         'profile_form': profile_form
     })
+
+@login_required
+def toggle_like(request, tweet_id):
+    tweet = get_object_or_404(Tweet, id=tweet_id)
+    content_type = ContentType.objects.get_for_model(tweet)
+    like, created = Like.objects.get_or_create(
+        user=request.user,
+        content_type=content_type,
+        object_id=tweet.id
+    )
+
+    if not created:
+        like.delete()  # User already liked, so unlike
+    return redirect('tweet_list')

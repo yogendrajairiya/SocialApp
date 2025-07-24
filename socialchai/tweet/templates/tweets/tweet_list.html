@@ -19,7 +19,7 @@
   <div id="tweet-container" class="container d-flex flex-column gap-3">
     <div class="row">
       {% for tweet in tweets %}
-        {% include 'tweets/_tweet_card.html' with tweet=tweet %}
+        {% include 'tweets/_tweet_card.html' with tweet=tweet liked_tweet_ids=liked_tweet_ids %}
       {% endfor %}
     </div>
   </div>
