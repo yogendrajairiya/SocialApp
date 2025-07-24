@@ -97,8 +97,12 @@ def tweet_comments(request, tweet_id):
 
 @login_required
 def profile_view(request):
-    profile = request.user.profile  # ✅ simple, clean
-    return render(request, 'profile.html', {'profile': profile})
+    profile = request.user.profile
+    tweet_count = Tweet.objects.filter(user=request.user).count()
+    return render(request, 'profile.html', {
+        'profile': profile,
+        'tweet_count': tweet_count
+    })
 
 
 @login_required
