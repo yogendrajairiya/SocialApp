@@ -15,19 +15,29 @@
       <small class="text-muted ms-3">(Edited {{ tweet.updated_at|timesince }} ago)</small>
     {% endif %}
 
-   <form method="POST" action="{% url 'toggle_like' tweet.id %}" style="display: inline;">
-      {% csrf_token %}
-      {% if tweet.id in liked_tweet_ids %}
-        <button type="submit" style="background: none; border: none; font-size: 1.2rem; cursor: pointer;">
-          ❤️</button>
-        {{ tweet.total_likes }}
-      {% else %}
-        <button type="submit" style="background: none; border: none; font-size: 1.2rem; cursor: pointer;">
-          🤍
-        </button>
-        {{ tweet.total_likes }}
-      {% endif %}
-    </form>
+    <div style="display: flex; align-items: center; gap: 10px;">
+      <form method="POST" action="{% url 'toggle_like' tweet.id %}" style="display: inline;">
+        {% csrf_token %}
+        {% if tweet.id in liked_tweet_ids %}
+          <button type="submit" style="background: none; border: none; font-size: 1.2rem; cursor: pointer;">
+            ❤️
+          </button>
+          {{ tweet.total_likes }}
+        {% else %}
+          <button type="submit" style="background: none; border: none; font-size: 1.2rem; cursor: pointer;">
+            🤍
+          </button>
+          {{ tweet.total_likes }}
+        {% endif %}
+      </form>
+
+      <a href="{% url 'tweet_comments' tweet.id %}" style="text-decoration: none; font-size: 1.2rem;">💬</a>
+
+      <button onclick="shareTweet('{{ request.build_absolute_uri }}')" style="background: none; border: none; font-size: 1.2rem; cursor: pointer;">
+        📤
+      </button>
+    </div>
+  
 
     <div class="card-body text-white">
       <p class="card-text">{{ tweet.text }}</p>
@@ -35,10 +45,22 @@
       {% if tweet.user == user %}
         <a href="{% url 'tweet_edit' tweet.id %}" class="btn btn-outline-primary btn-sm me-2">Edit</a>
         <a href="{% url 'tweet_delete' tweet.id %}" class="btn btn-outline-danger btn-sm">Delete</a>
-              <a href="{% url 'tweet_comments' tweet.id %}" class="btn btn-outline-light btn-sm ">💬 View Comments</a>
-
       {% endif %}
 
     </div>
   </div>
 </div>
+
+<script>
+    function shareTweet(url) {
+      if (navigator.share) {
+        navigator.share({
+          title: 'Check out this tweet!',
+          url: url
+        });
+      } else {
+        navigator.clipboard.writeText(url);
+        alert("Tweet link copied to clipboard!");
+      }
+    }
+  </script>
